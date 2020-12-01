@@ -8,14 +8,19 @@ fun readInput(path: String) =
         .filter { it.isNotBlank() }
         .map { it.toInt() }
 
-fun findNumbersOfSum(numbers: List<Int>, sumValue: Int): Pair<Int, Int>? {
+fun findTwoNumbersOfSum(numbers: List<Int>, sumValue: Int): Pair<Int, Int>? {
     val numbersByDifferenceTo2020 = numbers.associateBy {
         sumValue - it
     }
 
-    val secondNumber = numbers.find { it in numbersByDifferenceTo2020 } ?: return null
-    val firstNumber = numbersByDifferenceTo2020[secondNumber] ?: return null
-    return firstNumber to secondNumber
+    numbers.forEach { firstNumber ->
+        val secondNumber = numbersByDifferenceTo2020[firstNumber]
+        if (secondNumber != null && firstNumber != secondNumber) {
+            return firstNumber to secondNumber
+        }
+    }
+
+    return null
 }
 
 fun main(args: Array<String>) {
@@ -24,7 +29,7 @@ fun main(args: Array<String>) {
 
     val inputNumbers = readInput(path)
 
-    val numbersOfSum = findNumbersOfSum(inputNumbers, 2020)
+    val numbersOfSum = findTwoNumbersOfSum(inputNumbers, 2020)
     if (numbersOfSum == null) {
         println("No numbers were found")
         return
