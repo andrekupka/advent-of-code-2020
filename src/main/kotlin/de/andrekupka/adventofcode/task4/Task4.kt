@@ -17,16 +17,10 @@ fun readLines(path: String) =
 
 val lineRegex = """(\d+)-(\d+)\s+([a-z])\s*:\s+([a-z]+)""".toRegex()
 
-fun parseRule(line: String): RuleWithPassword? {
-    val result = lineRegex.matchEntire(line) ?: return null
-    return result.groupValues.let {
-        val firstIndex = it[1].toInt() - 1
-        val secondIndex = it[2].toInt() - 1
-        val character = it[3][0]
-        val rule = PasswordRule(listOf(firstIndex, secondIndex), character)
-        val password = it[4]
-        RuleWithPassword(rule, password)
-    }
+fun parseRule(line: String): RuleWithPassword? = lineRegex.matchEntire(line)?.let {
+    val (firstIndex, secondIndex, character, password) = it.destructured
+    val rule = PasswordRule(listOf(firstIndex.toInt() - 1, secondIndex.toInt() - 1), character.first())
+    RuleWithPassword(rule, password)
 }
 
 fun RuleWithPassword.isValid() = rule.run {

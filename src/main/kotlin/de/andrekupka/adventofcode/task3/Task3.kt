@@ -20,7 +20,7 @@ val lineRegex = """(\d+)-(\d+)\s+([a-z])\s*:\s+([a-z]+)""".toRegex()
 
 fun parseRule(line: String): RuleWithPassword? = lineRegex.matchEntire(line)?.let {
     val (minimumCount, maximumCount, character, password) = it.destructured
-    val rule = PasswordRule(minimumCount.toInt(), maximumCount.toInt(), character[0])
+    val rule = PasswordRule(minimumCount.toInt(), maximumCount.toInt(), character.first())
     RuleWithPassword(rule, password)
 }
 
