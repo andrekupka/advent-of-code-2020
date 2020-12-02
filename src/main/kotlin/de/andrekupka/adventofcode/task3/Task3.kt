@@ -18,22 +18,14 @@ fun readLines(path: String) =
 
 val lineRegex = """(\d+)-(\d+)\s+([a-z])\s*:\s+([a-z]+)""".toRegex()
 
-fun parseRule(line: String): RuleWithPassword? {
-    val result = lineRegex.matchEntire(line) ?: return null
-    return result.groupValues.let {
-        val minimumCount = it[1].toInt()
-        val maximumCount = it[2].toInt()
-        val character = it[3][0]
-        val rule = PasswordRule(minimumCount, maximumCount, character)
-        val password = it[4]
-        RuleWithPassword(rule, password)
-    }
+fun parseRule(line: String): RuleWithPassword? = lineRegex.matchEntire(line)?.let {
+    val (minimumCount, maximumCount, character, password) = it.destructured
+    val rule = PasswordRule(minimumCount.toInt(), maximumCount.toInt(), character[0])
+    RuleWithPassword(rule, password)
 }
 
 fun RuleWithPassword.isValid() = rule.run {
-    password
-        .count { it == character }
-        .let { it in minimumCount..maximumCount }
+    password.count { it == character } in minimumCount..maximumCount
 }
 
 fun main(args: Array<String>) {
