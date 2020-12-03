@@ -1,4 +1,4 @@
-package de.andrekupka.adventofcode.task1
+package de.andrekupka.adventofcode.day1.task1
 
 import java.io.File
 

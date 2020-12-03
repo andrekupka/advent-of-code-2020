@@ -1,10 +1,9 @@
-package de.andrekupka.adventofcode.task3
+package de.andrekupka.adventofcode.day2.task4
 
 import java.io.File
 
 data class PasswordRule(
-    val minimumCount: Int,
-    val maximumCount: Int,
+    val indexes: List<Int>,
     val character: Char
 )
 
@@ -19,13 +18,13 @@ fun readLines(path: String) =
 val lineRegex = """(\d+)-(\d+)\s+([a-z])\s*:\s+([a-z]+)""".toRegex()
 
 fun parseRule(line: String): RuleWithPassword? = lineRegex.matchEntire(line)?.let {
-    val (minimumCount, maximumCount, character, password) = it.destructured
-    val rule = PasswordRule(minimumCount.toInt(), maximumCount.toInt(), character.first())
+    val (firstIndex, secondIndex, character, password) = it.destructured
+    val rule = PasswordRule(listOf(firstIndex.toInt() - 1, secondIndex.toInt() - 1), character.first())
     RuleWithPassword(rule, password)
 }
 
 fun RuleWithPassword.isValid() = rule.run {
-    password.count { it == character } in minimumCount..maximumCount
+    indexes.map { password[it] }.count { it == character } == 1
 }
 
 fun main(args: Array<String>) {
