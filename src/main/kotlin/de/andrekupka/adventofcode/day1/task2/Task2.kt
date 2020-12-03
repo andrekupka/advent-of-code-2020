@@ -1,12 +1,7 @@
 package de.andrekupka.adventofcode.day1.task2
 
+import de.andrekupka.adventofcode.utils.readLinesMapNotBlank
 import java.io.File
-
-fun readInput(path: String) =
-    File(path)
-        .readLines()
-        .filter { it.isNotBlank() }
-        .map { it.toInt() }
 
 data class ResultNumbers(
     val first: Int,
@@ -28,7 +23,7 @@ fun findThreeNumbersOfSum(numbers: List<Int>, sumValue: Int): ResultNumbers? {
 }
 
 fun main(args: Array<String>) {
-    val inputNumbers = readInput(args[0])
+    val inputNumbers = readLinesMapNotBlank(args[0]) { it.toInt() }
 
     val numbersOfSum = findThreeNumbersOfSum(inputNumbers, 2020)
     if (numbersOfSum == null) {

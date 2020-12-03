@@ -4,10 +4,8 @@ import de.andrekupka.adventofcode.day3.FieldType
 import de.andrekupka.adventofcode.day3.MapWithTrees
 import de.andrekupka.adventofcode.day3.TraversalFieldTypeCounter
 import de.andrekupka.adventofcode.day3.fromLines
+import de.andrekupka.adventofcode.utils.readLines
 import java.io.File
-
-fun readLines(path: String) =
-    File(path).readLines()
 
 fun main(args: Array<String>) {
     val path = args[0]

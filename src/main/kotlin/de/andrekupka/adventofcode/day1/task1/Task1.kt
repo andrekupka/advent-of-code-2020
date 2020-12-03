@@ -1,12 +1,7 @@
 package de.andrekupka.adventofcode.day1.task1
 
+import de.andrekupka.adventofcode.utils.readLinesMapNotBlank
 import java.io.File
-
-fun readInput(path: String) =
-    File(path)
-        .readLines()
-        .filter { it.isNotBlank() }
-        .map { it.toInt() }
 
 fun findTwoNumbersOfSum(numbers: List<Int>, sumValue: Int): Pair<Int, Int>? {
     val numbersByDifferenceTo2020 = numbers.associateBy {
@@ -27,7 +22,7 @@ fun main(args: Array<String>) {
     val path = args[0]
     println("Reading input from $path")
 
-    val inputNumbers = readInput(path)
+    val inputNumbers = readLinesMapNotBlank(path) { it.toInt() }
 
     val numbersOfSum = findTwoNumbersOfSum(inputNumbers, 2020)
     if (numbersOfSum == null) {

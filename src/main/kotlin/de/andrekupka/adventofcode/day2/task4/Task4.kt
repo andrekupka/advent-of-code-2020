@@ -1,5 +1,6 @@
 package de.andrekupka.adventofcode.day2.task4
 
+import de.andrekupka.adventofcode.utils.readLines
 import java.io.File
 
 data class PasswordRule(
@@ -11,9 +12,6 @@ data class RuleWithPassword(
     val rule: PasswordRule,
     val password: String
 )
-
-fun readLines(path: String) =
-    File(path).readLines()
 
 val lineRegex = """(\d+)-(\d+)\s+([a-z])\s*:\s+([a-z]+)""".toRegex()
 
