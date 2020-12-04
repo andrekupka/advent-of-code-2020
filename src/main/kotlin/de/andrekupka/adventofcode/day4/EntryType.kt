@@ -1,5 +1,6 @@
 package de.andrekupka.adventofcode.day4
 
+
 enum class EntryType(
     val representation: String,
     val required: Boolean = true

@@ -7,6 +7,9 @@ fun main(args: Array<String>) {
 
     val passports = PassportParser.parseFromLines(lines)
 
-    val validPassportCount = passports.count { it.containsAllRequiredEntries() }
+    val completePassportCount = passports.count { it.containsAllRequiredEntries() }
+    println("There are $completePassportCount passports with all required entries")
+
+    val validPassportCount = passports.count { it.isValid() }
     println("There are $validPassportCount valid passports")
 }
