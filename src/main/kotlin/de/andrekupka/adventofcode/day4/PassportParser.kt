@@ -37,5 +37,5 @@ object PassportParser {
         val valuePart = parts[1]
         val type = EntryType.fromString(parts[0]) ?: throw PassportParsingException("Invalid entry type: $typePart")
         type to valuePart
-    }.let { Passport(it) }
+    }.let { Passport(representation, it) }
 }

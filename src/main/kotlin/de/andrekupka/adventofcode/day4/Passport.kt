@@ -1,6 +1,7 @@
 package de.andrekupka.adventofcode.day4
 
 data class Passport(
+    val representation: String,
     val entries: Map<EntryType, String>
 )
 
