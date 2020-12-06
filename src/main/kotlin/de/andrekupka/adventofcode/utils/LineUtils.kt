@@ -1,22 +1,22 @@
 package de.andrekupka.adventofcode.utils
 
-fun groupByNonBlankLines(lines: List<String>): List<List<String>> {
+fun groupByBlankLines(lines: List<String>): List<List<String>> {
     class Accumulator {
         val result = mutableListOf<List<String>>()
         lateinit var currentGroup: MutableList<String>
 
-        private var startNewElement = true
+        private var startNewGroup = true
 
         fun accumulate(line: String): Accumulator {
-            if (startNewElement) {
-                startNewElement = false
-                currentGroup = mutableListOf()
-                result.add(currentGroup)
-            }
             if (line.isBlank()) {
-                startNewElement = true
+                startNewGroup = true
             } else {
-                currentGroup.add(line)
+                if (startNewGroup) {
+                    startNewGroup = false
+                    currentGroup = mutableListOf(line).also { result.add(it) }
+                } else {
+                    currentGroup.add(line)
+                }
             }
             return this
         }
@@ -26,7 +26,7 @@ fun groupByNonBlankLines(lines: List<String>): List<List<String>> {
 }
 
 fun groupAndReduceByNonBlankLines(lines: List<String>, operation: (String, String) -> String): List<String> =
-    groupByNonBlankLines(lines).map { it.reduce(operation) }
+    groupByBlankLines(lines).map { it.reduce(operation) }
 
 fun <T> groupAndFoldByNonBlankLines(lines: List<String>, initial: () -> T, operation: (T, String) -> T): List<T> =
-    groupByNonBlankLines(lines).map { it.fold(initial(), operation) }
+    groupByBlankLines(lines).map { it.fold(initial(), operation) }
