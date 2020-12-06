@@ -2,20 +2,18 @@ package de.andrekupka.adventofcode.day5
 
 import de.andrekupka.adventofcode.utils.readLines
 
-class BinarySearchException(message: String): RuntimeException(message)
+class BinarySearchException(message: String) : RuntimeException(message)
 
 fun <T> binarySearch(input: List<T>, bottom: T, top: T, start: Int = 0, end: Int = 127): Int {
-    var range = start..end
-    input.forEach {
-        val first = range.first
-        val last = range.last
-        val middle = first + (last - first) / 2
-        range = when (it) {
-            bottom -> first..middle
-            top -> middle+1..last
-            else -> throw BinarySearchException("Invalid input element: $it")
+    val range = input.fold(start..end) { acc, value ->
+        acc.run {
+            val middle = first + (last - first) / 2
+            when (value) {
+                bottom -> first..middle
+                top -> middle + 1..last
+                else -> throw BinarySearchException("Invalid input element: $value")
+            }
         }
-        println("$it -> $range")
     }
     if (range.first != range.last) {
         throw BinarySearchException("Range did not converge to a single element: $range")
