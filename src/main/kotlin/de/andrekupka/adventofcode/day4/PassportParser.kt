@@ -1,13 +1,13 @@
 package de.andrekupka.adventofcode.day4
 
-import de.andrekupka.adventofcode.utils.groupAndFlattenNonBlankLines
+import de.andrekupka.adventofcode.utils.groupAndReduceByNonBlankLines
 
 class PassportParsingException(message: String) : RuntimeException(message)
 
 object PassportParser {
 
     fun parseFromLines(lines: List<String>): List<Passport> =
-        groupAndFlattenNonBlankLines(lines) {
+        groupAndReduceByNonBlankLines(lines) {
                 first, second -> "$first $second"
         }.map { parsePassport(it) }
 
