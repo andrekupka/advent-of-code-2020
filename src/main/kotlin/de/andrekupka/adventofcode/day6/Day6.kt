@@ -5,9 +5,16 @@ import de.andrekupka.adventofcode.utils.readLines
 
 fun main(args: Array<String>) {
     val lines = readLines(args[0])
-    val groupedLines = groupAndFoldByNonBlankLines(lines, { "" }) { first, second -> "$first$second" }
-    val positiveAnswers = groupedLines.map { it.toSet() }
 
-    val positiveAnswerCount = positiveAnswers.sumBy { it.size }
-    println("There are overall $positiveAnswerCount positive answer")
+    val anyonePositiveAnswersByGroup = groupAndFoldByNonBlankLines(lines, { emptySet<Char>() }) { currentAnswers, line ->
+        currentAnswers.union(line.toSet())
+    }
+    val anyonePositiveAnswerCount = anyonePositiveAnswersByGroup.sumBy { it.size }
+    println("There are $anyonePositiveAnswerCount positive answer where anyone of a group")
+
+    val everyonePositiveAnswersByGroup = groupAndFoldByNonBlankLines(lines, { ('a'..'z').toSet() }) { currentAnswers, line ->
+        currentAnswers.intersect(line.toSet())
+    }
+    val everyonePositiveAnswerCount = everyonePositiveAnswersByGroup.sumBy { it.size }
+    println("There are $everyonePositiveAnswerCount positive answer where everyone of a group answered")
 }
