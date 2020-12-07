@@ -7,10 +7,12 @@ version '1.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
+    maven { setUrl("https://dl.bintray.com/hotkeytlt/maven") }
 }
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib"
+    implementation 'com.github.h0tk3y.betterParse:better-parse:0.4.0'
     implementation 'org.junit.jupiter:junit-jupiter-api:5.4.2'
     implementation 'org.junit.jupiter:junit-jupiter-engine:5.4.2'
     testCompile 'com.willowtreeapps.assertk:assertk-jvm:0.23'
