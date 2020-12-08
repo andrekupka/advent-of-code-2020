@@ -10,12 +10,12 @@ data class BagCount(
     val color: String
 )
 
-data class LuggageRule(
+data class BagRule(
     val color: String,
-    val bags: List<BagCount>
+    val containedBags: List<BagCount>
 )
 
-val LuggageParser = object : Grammar<LuggageRule>() {
+val bagRuleParser = object : Grammar<BagRule>() {
     val contain by literalToken("contain")
     val no by literalToken("no")
     val other by literalToken("other")
@@ -46,7 +46,7 @@ val LuggageParser = object : Grammar<LuggageRule>() {
     val startParser by colorParser * -bag * -contain
 
     val ruleParser = startParser * bagCountAlternativeParser * -dot use {
-        LuggageRule(t1, t2)
+        BagRule(t1, t2)
     }
 
     override val rootParser get() = ruleParser
