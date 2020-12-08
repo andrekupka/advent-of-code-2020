@@ -45,7 +45,7 @@ val bagRuleParser = object : Grammar<BagRule>() {
 
     val startParser by colorParser * -bag * -contain
 
-    val ruleParser = startParser * bagCountAlternativeParser * -dot use {
+    val ruleParser by startParser * bagCountAlternativeParser * -dot use {
         BagRule(t1, t2)
     }
 

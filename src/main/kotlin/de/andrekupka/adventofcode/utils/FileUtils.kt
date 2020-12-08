@@ -2,6 +2,8 @@ package de.andrekupka.adventofcode.utils
 
 import java.io.File
 
+fun readFile(path: String) = File(path).readText()
+
 fun readLines(path: String) = File(path).readLines()
 
 fun readLinesNotBlank(path: String) = readLines(path).filter { it.isNotBlank() }
