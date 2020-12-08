@@ -10,7 +10,7 @@ class RecursiveBagCounter(rules: List<BagRule>) {
         val rule = rulesByColor[color] ?: return 1
 
         return 1 + rule.containedBags.sumBy {
-            it.count * countBagsContainedIn(it.color)
+            it.count * computeRecursiveBagCount(it.color)
         }
     }
 }
