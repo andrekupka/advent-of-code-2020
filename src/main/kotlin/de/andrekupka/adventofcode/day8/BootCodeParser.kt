@@ -21,19 +21,25 @@ data class BootCode(
 )
 
 val bootCodeParser = object : Grammar<BootCode>() {
-    val acc by literalToken("acc") use { InstructionType.ACC }
-    val jmp by literalToken("jmp") use { InstructionType.JMP }
-    val nop by literalToken("nop") use { InstructionType.NOP }
+    val acc by literalToken("acc")
+    val jmp by literalToken("jmp")
+    val nop by literalToken("nop")
+
+    val number by regexToken("[+\\-]([0-9]|[1-9][0-9]+)")
 
     val whitespaces by regexToken("\\s+", ignore = true)
 
-    val instructionType by acc or jmp or nop
+    val accParser by acc use { InstructionType.ACC }
+    val jmpParser by jmp use { InstructionType.JMP }
+    val nopParser by nop use { InstructionType.NOP }
 
-    val argument by regexToken("[+\\-]([0-9]|[1-9][0-9]+)") use { text.toLong() }
+    val instructionType by accParser  or jmpParser or nopParser
 
-    val instruction by instructionType and argument use { Instruction(t1, t2) }
+    val numberArgument by number use { text.toLong() }
 
-    val code by 0 timesOrMore instruction use { BootCode(this) }
+    val instruction by instructionType and numberArgument use { Instruction(t1, t2) }
+
+    val code by zeroOrMore(instruction) use { BootCode(this) }
 
     override val rootParser get() = code
 }
