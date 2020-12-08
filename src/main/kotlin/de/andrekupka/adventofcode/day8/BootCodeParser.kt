@@ -25,7 +25,7 @@ val bootCodeParser = object : Grammar<BootCode>() {
     val jmp by literalToken("jmp")
     val nop by literalToken("nop")
 
-    val number by regexToken("[+\\-]([0-9]|[1-9][0-9]+)")
+    val number by regexToken("[+\\-]([1-9][0-9]+|[0-9])")
 
     val whitespaces by regexToken("\\s+", ignore = true)
 
