@@ -8,4 +8,9 @@ fun main(args: Array<String>) {
 
     val bootCode = bootCodeParser.parseToEnd(content)
     bootCode.instructions.forEach { println(it) }
+
+    val callback = SecondInstructionHitAnalyzingExecutionCallback()
+    BootCodeExecutor(callback).execute(bootCode)
+    val result = callback.accumulatorResult
+    println("Accumulator before second instruction hit was $result")
 }

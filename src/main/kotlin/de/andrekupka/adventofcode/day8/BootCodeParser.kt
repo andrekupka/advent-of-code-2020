@@ -13,7 +13,7 @@ enum class InstructionType {
 
 data class Instruction(
     val type: InstructionType,
-    val argument: Long
+    val argument: Int
 )
 
 data class BootCode(
@@ -35,7 +35,7 @@ val bootCodeParser = object : Grammar<BootCode>() {
 
     val instructionType by accParser  or jmpParser or nopParser
 
-    val numberArgument by number use { text.toLong() }
+    val numberArgument by number use { text.toInt() }
 
     val instruction by instructionType and numberArgument use { Instruction(t1, t2) }
 
