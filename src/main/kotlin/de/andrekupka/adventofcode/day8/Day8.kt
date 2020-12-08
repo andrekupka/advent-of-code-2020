@@ -9,8 +9,8 @@ fun main(args: Array<String>) {
     val bootCode = bootCodeParser.parseToEnd(content)
     bootCode.instructions.forEach { println(it) }
 
-    val callback = SecondInstructionHitAnalyzingExecutionCallback()
+    val callback = InfiniteLoopAnalyzingExecutionCallback()
     BootCodeExecutor(callback).execute(bootCode)
-    val result = callback.accumulatorResult
+    val result = callback.infiniteLoopAccumulator
     println("Accumulator before second instruction hit was $result")
 }

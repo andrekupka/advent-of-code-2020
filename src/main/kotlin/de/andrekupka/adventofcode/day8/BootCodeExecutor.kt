@@ -12,6 +12,7 @@ private object NoOpExecutionCallback : ExecutionCallback {
 }
 
 interface ExecutionContext {
+    val instructions: List<Instruction>
     val instructionPointer: Int
     val instruction: Instruction
     val accumulator: Int
@@ -25,6 +26,7 @@ class BootCodeExecutor(
         val state = ExecutionState(bootCode.instructions)
 
         val context = object : ExecutionContext {
+            override val instructions get() = bootCode.instructions
             override val instructionPointer get() = state.instructionPointer
             override val instruction get() = state.currentInstruction
             override val accumulator get() = state.accumulator
