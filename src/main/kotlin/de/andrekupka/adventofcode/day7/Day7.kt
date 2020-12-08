@@ -38,4 +38,7 @@ fun main(args: Array<String>) {
 
     val shinyGoldCount = searchBagsContainingBagOfColor("shiny gold", rules)
     println("There are $shinyGoldCount bags that contain a shiny gold bag")
+
+    val shinyGoldOverallBagCount = RecursiveBagCounter(rules).countBagsContainedIn("shiny gold")
+    println("The shiny gold bag contains $shinyGoldOverallBagCount bags")
 }
