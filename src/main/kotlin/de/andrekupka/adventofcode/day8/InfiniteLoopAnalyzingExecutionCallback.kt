@@ -2,7 +2,7 @@ package de.andrekupka.adventofcode.day8
 
 class InfiniteLoopAnalyzingExecutionCallback : ExecutionCallback {
 
-    private var alreadyHitInstructionPointers = mutableSetOf<Int>()
+    private val visitedInstructions = mutableMapOf<Int, Instruction>()
 
     private var hadInfiniteLoop: Boolean = false
 
@@ -12,15 +12,16 @@ class InfiniteLoopAnalyzingExecutionCallback : ExecutionCallback {
     var infiniteLoopInstructionPointer: Int? = null
         private set
 
+    val executedInstructions: Map<Int, Instruction> get() = visitedInstructions
 
     override fun beforeInstruction(context: ExecutionContext): Boolean = context.run {
-        if (instructionPointer in alreadyHitInstructionPointers) {
+        if (instructionPointer in visitedInstructions) {
             hadInfiniteLoop = true
             infiniteLoopAccumulator = accumulator
             infiniteLoopInstructionPointer = instructionPointer
             return false
         }
-        alreadyHitInstructionPointers.add(instructionPointer)
+        visitedInstructions[instructionPointer] = instruction
         return true
     }
 }

@@ -18,11 +18,15 @@ interface ExecutionContext {
     val accumulator: Int
 }
 
-class BootCodeExecutor(
-    private val executionCallback: ExecutionCallback = NoOpExecutionCallback
-) {
+sealed class ExecutionResult
 
-    fun execute(bootCode: BootCode): Int {
+data class Interrupted(val intermediateAccumulator: Int) : ExecutionResult()
+
+data class Halted(val finalAccumulator: Int): ExecutionResult()
+
+class BootCodeExecutor {
+
+    fun execute(bootCode: BootCode, callback: ExecutionCallback = NoOpExecutionCallback): ExecutionResult {
         val state = ExecutionState(bootCode.instructions)
 
         val context = object : ExecutionContext {
@@ -32,21 +36,21 @@ class BootCodeExecutor(
             override val accumulator get() = state.accumulator
         }
 
-        while (!state.hasFinished) {
-            val shouldContinue = executionCallback.beforeInstruction(context)
-            if (!shouldContinue) {
-                break
+        while (!state.hasHalted) {
+            val shouldInterrupt = !callback.beforeInstruction(context)
+            if (shouldInterrupt) {
+                return Interrupted(state.accumulator)
             }
             state.executeNextInstruction()
         }
-        return state.accumulator
+        return Halted(state.accumulator)
     }
 
     private class ExecutionState(
         private val instructions: List<Instruction>,
         var instructionPointer: Int = 0,
         var accumulator: Int = 0,
-        var hasFinished: Boolean = false
+        var hasHalted: Boolean = false
     ) {
         val currentInstruction get() = if (instructionPointer in instructions.indices) {
             instructions[instructionPointer]
@@ -55,7 +59,7 @@ class BootCodeExecutor(
         fun executeNextInstruction() {
             execute(currentInstruction)
             instructionPointer++
-            hasFinished = instructionPointer == instructions.size
+            hasHalted = instructionPointer == instructions.size
         }
 
         private fun execute(instruction: Instruction) = when(instruction.type) {
