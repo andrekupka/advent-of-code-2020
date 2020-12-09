@@ -26,9 +26,46 @@ fun findFirstNumberNotSumOf2AfterPreamble(numbers: List<Long>, preambleSize: Int
     return null
 }
 
+fun findNumbersThatSumUpToWeakness(numbers: List<Long>, weakness: Long): List<Long>? {
+    var sum = 0L
+    var inclusiveStartIndex = 0
+    var exclusiveEndIndex = 0
+
+    while (exclusiveEndIndex <= numbers.lastIndex) {
+        when {
+            sum < weakness -> {
+                sum += numbers[exclusiveEndIndex++]
+            }
+            sum > weakness -> {
+                sum -= numbers[inclusiveStartIndex++]
+            }
+            else -> break
+        }
+    }
+
+    return if (sum == weakness) {
+        numbers.subList(inclusiveStartIndex, exclusiveEndIndex);
+    } else null
+}
+
+
 fun main(args: Array<String>) {
     val numbers = readLinesMapNotBlank(args[0]) { it.toLong() }
 
-    val result = findFirstNumberNotSumOf2AfterPreamble(numbers, 25)
-    println("First number not matching is $result")
+    val weakNumber = findFirstNumberNotSumOf2AfterPreamble(numbers, 25)
+    if (weakNumber == null) {
+        println("No weak number was found")
+        return
+    }
+    println("First encryption weakness is $weakNumber")
+
+    val weaknessNumbers = findNumbersThatSumUpToWeakness(numbers, weakNumber)
+    if (weaknessNumbers == null || weaknessNumbers.size < 2) {
+        println("No weak number range was found")
+        return
+    }
+    println("Weak number range is $weaknessNumbers")
+
+    val result = weaknessNumbers.minOrNull()!! + weaknessNumbers.maxOrNull()!!
+    println("Weak number result is $result")
 }
