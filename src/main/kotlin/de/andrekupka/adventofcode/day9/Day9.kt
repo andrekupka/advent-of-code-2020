@@ -3,8 +3,8 @@ package de.andrekupka.adventofcode.day9
 import de.andrekupka.adventofcode.utils.readLinesMapNotBlank
 import kotlin.math.max
 
-fun <T> List<T>.getXPrecedingElementsFromIndex(precedingSize: Int, index: Int): List<T> {
-    val inclusiveMinimumIndex = max(index - precedingSize, 0)
+fun <T> List<T>.getPreambleRelativeToIndex(index: Int, preambleSize: Int): List<T> {
+    val inclusiveMinimumIndex = max(index - preambleSize, 0)
     return subList(inclusiveMinimumIndex, index)
 }
 
@@ -17,7 +17,7 @@ fun List<Long>.sumsOfAnyTwoContained(): Set<Long> =
 
 fun findFirstNumberNotSumOf2AfterPreamble(numbers: List<Long>, preambleSize: Int): Long? {
     numbers.subList(preambleSize, numbers.size).forEachIndexed { index, number ->
-        val precedingNumbers = numbers.getXPrecedingElementsFromIndex(preambleSize, index + preambleSize)
+        val precedingNumbers = numbers.getPreambleRelativeToIndex(index + preambleSize, preambleSize)
         val sumsOfTwo = precedingNumbers.sumsOfAnyTwoContained()
         if (number !in sumsOfTwo) {
             return number
