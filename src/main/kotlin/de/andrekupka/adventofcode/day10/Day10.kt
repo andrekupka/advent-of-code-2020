@@ -1,29 +1,44 @@
 package de.andrekupka.adventofcode.day10
 
 import de.andrekupka.adventofcode.utils.readLinesMapNotBlank
+import java.math.BigInteger
 
 fun <K, V> MutableMap<K, V>.computeWithDefault(key: K, defaultValue: V, operation: (previousValue: V) -> V) =
     compute(key) { _, currentValue -> operation(currentValue ?: defaultValue) }
 
+fun <T> List<T>.sumByBigInteger(selector: (T) -> BigInteger): BigInteger = fold(BigInteger.ZERO) {
+        accumulator, element -> accumulator + selector(element)
+}
+
 @ExperimentalStdlibApi
-fun computeDifferenceDistribution(sortedRatings: List<Int>) = buildMap<Int, Int> {
+fun computeDifferenceDistribution(sortedRatings: List<Long>) = buildMap<Long, Long> {
     for (i in 0 until sortedRatings.lastIndex) {
         val difference = sortedRatings[i + 1] - sortedRatings[i]
         computeWithDefault(difference, 0) { it + 1 }
     }
 }
 
+fun computeRatingSuccessors(sortedRatings: List<Long>, maximumRatingDifference: Long = 3) = sortedRatings.mapIndexed { index, rating ->
+    rating to if (index == sortedRatings.lastIndex) {
+        emptyList()
+    } else {
+        sortedRatings.subList(index + 1, sortedRatings.size).takeWhile { it - rating <= maximumRatingDifference }
+    }
+}.toMap()
+
 @ExperimentalStdlibApi
 fun main(args: Array<String>) {
-    val adapterRatings = readLinesMapNotBlank(args[0]) { it.toInt() }
+    val adapterRatings = readLinesMapNotBlank(args[0]) { it.toLong() }
+    val sortedAdapterRatings = adapterRatings.sorted()
 
-    val outletJoltage = 0
-    val deviceJoltage = adapterRatings.maxOrNull()?.let { it + 3 }
-    if (deviceJoltage == null) {
-        println("No max rating found")
+    val outletRating = 0L
+    val deviceRating = sortedAdapterRatings.lastOrNull()?.let { it + 3 }
+    if (deviceRating == null) {
+        println("No device rating found")
         return
     }
-    val sortedRatings = (adapterRatings + listOf(outletJoltage, deviceJoltage)).sortedBy { it }
+    println("Device joltage is $deviceRating")
+    val sortedRatings = (listOf(outletRating) + adapterRatings + listOf(deviceRating)).sortedBy { it }
 
     val differenceDistribution = computeDifferenceDistribution(sortedRatings)
 
@@ -31,4 +46,9 @@ fun main(args: Array<String>) {
         getOrDefault(1, 0) * getOrDefault(3, 0)
     }
     println("The product of one and three difference counts is $oneAndThreeDifferenceCountProduct")
+
+    val adapterSuccessors = computeRatingSuccessors(sortedRatings)
+
+    val numberOfArrangements =  NumberOfArrangementComputer(adapterSuccessors, outletRating, deviceRating).computeNumberOfArrangements()
+    println("There are $numberOfArrangements number of arrangements")
 }
