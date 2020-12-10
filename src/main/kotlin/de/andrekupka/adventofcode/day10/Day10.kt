@@ -26,6 +26,20 @@ fun computeRatingSuccessors(sortedRatings: List<Long>, maximumRatingDifference: 
     }
 }.toMap()
 
+fun computeNumberOfArrangements(startRating: Long, endRating: Long, ratingSuccessors: Map<Long, List<Long>>): BigInteger {
+    val arrangementCache = mutableMapOf<Long, BigInteger>()
+
+    fun computeWithCache(intermediateRating: Long): BigInteger = arrangementCache[intermediateRating] ?: run {
+        if (intermediateRating == endRating) {
+            BigInteger.ONE
+        } else ratingSuccessors[intermediateRating]?.takeIf { it.isNotEmpty() }?.sumByBigInteger {
+            computeWithCache(it)
+        } ?: BigInteger.ZERO
+    }.also { arrangementCache[intermediateRating] = it }
+
+    return computeWithCache(startRating)
+}
+
 @ExperimentalStdlibApi
 fun main(args: Array<String>) {
     val adapterRatings = readLinesMapNotBlank(args[0]) { it.toLong() }
@@ -49,6 +63,6 @@ fun main(args: Array<String>) {
 
     val adapterSuccessors = computeRatingSuccessors(sortedRatings)
 
-    val numberOfArrangements =  NumberOfArrangementComputer(adapterSuccessors, outletRating, deviceRating).computeNumberOfArrangements()
+    val numberOfArrangements =  computeNumberOfArrangements(outletRating, deviceRating, adapterSuccessors)
     println("There are $numberOfArrangements number of arrangements")
 }
