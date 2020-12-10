@@ -52,7 +52,7 @@ fun main(args: Array<String>) {
         return
     }
     println("Device joltage is $deviceRating")
-    val sortedRatings = (listOf(outletRating) + adapterRatings + listOf(deviceRating)).sortedBy { it }
+    val sortedRatings = (listOf(outletRating) + adapterRatings + listOf(deviceRating)).sorted()
 
     val differenceDistribution = computeDifferenceDistribution(sortedRatings)
 
