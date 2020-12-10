@@ -2,12 +2,14 @@ package de.andrekupka.adventofcode.day10
 
 import de.andrekupka.adventofcode.utils.readLinesMapNotBlank
 
+fun <K, V> MutableMap<K, V>.computeWithDefault(key: K, defaultValue: V, operation: (previousValue: V) -> V) =
+    compute(key) { _, currentValue -> operation(currentValue ?: defaultValue) }
+
 @ExperimentalStdlibApi
 fun computeDifferenceDistribution(sortedRatings: List<Int>) = buildMap<Int, Int> {
     for (i in 0 until sortedRatings.lastIndex) {
         val difference = sortedRatings[i + 1] - sortedRatings[i]
-        val count = getOrDefault(difference, 0)
-        this[difference] = count + 1
+        computeWithDefault(difference, 0) { it + 1 }
     }
 }
 
