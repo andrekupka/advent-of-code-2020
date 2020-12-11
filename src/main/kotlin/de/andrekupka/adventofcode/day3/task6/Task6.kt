@@ -3,7 +3,6 @@ package de.andrekupka.adventofcode.day3.task6
 import de.andrekupka.adventofcode.day3.FieldType
 import de.andrekupka.adventofcode.day3.MapWithTrees
 import de.andrekupka.adventofcode.day3.TraversalFieldTypeCounter
-import de.andrekupka.adventofcode.day3.fromLines
 import de.andrekupka.adventofcode.utils.readLines
 import java.io.File
 

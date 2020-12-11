@@ -1,22 +1,16 @@
 package de.andrekupka.adventofcode.day3
 
+import de.andrekupka.adventofcode.utils.map.FieldMap
+
 
 class MapWithTrees(
-    val width: Int,
-    private val fields: List<FieldType>
-) {
-    val height = fields.size / width
+    fields: List<FieldType>,
+    width: Int
+) : FieldMap<FieldType>(fields, width) {
 
-    fun getType(x: Int, y: Int): FieldType {
-        val xIndex = x % width
-
-        val effectiveIndex = width * y + xIndex
-        return fields[effectiveIndex]
+    companion object {
+        fun fromLines(
+            lines: List<String>, emptyChar: Char = '.', treeChar: Char = '#'
+        ) = MapWithTreesParser(MapWithTreesParsingStrategy(emptyChar, treeChar)).parseMap(lines)
     }
-
-    companion object
 }
-
-fun MapWithTrees.Companion.fromLines(
-    lines: List<String>, emptyChar: Char = '.', treeChar: Char = '#'
-) = MapWithTreesParser(emptyChar, treeChar).parse(lines)

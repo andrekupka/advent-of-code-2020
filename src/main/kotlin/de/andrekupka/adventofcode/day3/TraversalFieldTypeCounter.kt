@@ -10,7 +10,7 @@ class TraversalFieldTypeCounter(
         var x = 0
         var y = 0
         while (y < map.height) {
-            val currentType = map.getType(x, y)
+            val currentType = map.getFieldType(x, y)
             if (currentType == fieldType) {
                 count++
             }
