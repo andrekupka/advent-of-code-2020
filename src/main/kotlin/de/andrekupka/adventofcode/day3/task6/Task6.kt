@@ -1,17 +1,16 @@
 package de.andrekupka.adventofcode.day3.task6
 
 import de.andrekupka.adventofcode.day3.FieldType
-import de.andrekupka.adventofcode.day3.MapWithTrees
+import de.andrekupka.adventofcode.day3.MapWithTreesParser
 import de.andrekupka.adventofcode.day3.TraversalFieldTypeCounter
 import de.andrekupka.adventofcode.utils.readLines
-import java.io.File
 
 fun main(args: Array<String>) {
     val path = args[0]
 
     val lines = readLines(path)
 
-    val map = MapWithTrees.fromLines(lines)
+    val map = MapWithTreesParser().parseMap(lines)
 
     val steps = listOf(
         1 to 1,

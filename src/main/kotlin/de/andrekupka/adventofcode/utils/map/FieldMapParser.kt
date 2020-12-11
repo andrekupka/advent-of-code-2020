@@ -10,7 +10,7 @@ interface FieldMapParsingStrategy<M : FieldMap<F>, F> {
 }
 
 interface SimpleFieldMapParsingStrategy<F> : FieldMapParsingStrategy<FieldMap<F>, F> {
-    override fun createMap(fields: List<F>, width: Int) = FieldMap(fields, width)
+    override fun createMap(fields: List<F>, width: Int) = DefaultFieldMap(fields, width)
 }
 
 open class FieldMapParser<M : FieldMap<F>, F>(
@@ -18,7 +18,7 @@ open class FieldMapParser<M : FieldMap<F>, F>(
 ) {
 
     fun parseMap(rows: List<String>): M {
-        val width = rows.map { it.length }.singleOrNull() ?: throw MapParsingException("There must not be rows with different lengths")
+        val width = rows.map { it.length }.toSet().singleOrNull() ?: throw MapParsingException("There must not be rows with different lengths")
         val fields = rows.flatMap { parseRow(it) }
         return strategy.createMap(fields, width)
     }

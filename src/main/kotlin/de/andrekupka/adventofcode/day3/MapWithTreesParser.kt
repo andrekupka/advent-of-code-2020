@@ -1,5 +1,6 @@
 package de.andrekupka.adventofcode.day3
 
+import de.andrekupka.adventofcode.utils.map.DefaultFieldMap
 import de.andrekupka.adventofcode.utils.map.FieldMapParser
 import de.andrekupka.adventofcode.utils.map.FieldMapParsingStrategy
 
@@ -14,7 +15,7 @@ class MapWithTreesParsingStrategy(
         else -> null
     }
 
-    override fun createMap(fields: List<FieldType>, width: Int) = MapWithTrees(fields, width)
+    override fun createMap(fields: List<FieldType>, width: Int) = DefaultFieldMap(fields, width, endlessWidth = true)
 }
 
 class MapWithTreesParser(

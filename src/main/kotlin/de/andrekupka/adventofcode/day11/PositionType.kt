@@ -1,16 +1,15 @@
 package de.andrekupka.adventofcode.day11
 
-enum class PositionType {
-    FLOOR,
-    EMPTY_SEAT,
-    OCCUPIED_SEAT;
+enum class PositionType(val representation: Char) {
+    FLOOR('.'),
+    EMPTY_SEAT('L'),
+    OCCUPIED_SEAT('#');
+
+    override fun toString(): String = representation.toString()
 
     companion object {
-        fun fromChar(c: Char): PositionType? = when(c) {
-            '.' -> FLOOR
-            'L' -> EMPTY_SEAT
-            '#' -> OCCUPIED_SEAT
-            else -> null
-        }
+        private val representationMap = values().associateBy { it.representation }
+
+        fun fromChar(representation: Char) = representationMap[representation]
     }
 }
