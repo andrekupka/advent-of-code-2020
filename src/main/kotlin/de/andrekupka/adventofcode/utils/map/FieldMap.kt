@@ -1,6 +1,7 @@
 package de.andrekupka.adventofcode.utils.map
 
 import java.util.*
+import kotlin.math.max
 
 interface FieldMap<F> {
     val width: Int
@@ -106,6 +107,33 @@ fun <F> FieldMap<F>.getAdjacentFieldTypes(x: Int, y: Int): List<F> = buildList {
             }
         }
     }
+}
+
+private val DIRECTION_LIST = listOf(
+    -1 to 0, // left
+    -1 to -1, // left up
+    0 to -1, // up
+    1 to -1, // right up
+    1 to 0, // right
+    1 to 1, // right down
+    0 to 1, // down
+    -1 to 1 // left down
+)
+
+fun <F> FieldMap<F>.countVisibleFieldTypes(x: Int, y: Int, blockType: F, searchType: F): Int {
+    fun searchInDirection(deltaX: Int, deltaY: Int): Boolean {
+        for (distance in 1..max(width, height)) {
+            val effectiveX = x + deltaX * distance
+            val effectiveY = y + deltaY * distance
+            when (getFieldType(effectiveX, effectiveY)) {
+                blockType, null -> return false
+                searchType -> return true
+            }
+        }
+        return false
+    }
+
+    return DIRECTION_LIST.map { (deltaX, deltaY) -> searchInDirection(deltaX, deltaY) }.count { it }
 }
 
 private fun <F> FieldMap<F>.copy(): DefaultFieldMap<F> = MutableList(width * height) { index ->
