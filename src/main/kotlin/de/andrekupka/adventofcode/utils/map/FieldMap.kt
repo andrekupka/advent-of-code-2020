@@ -47,7 +47,7 @@ class DefaultFieldMap<F>(
         x
     }
 
-    private fun isValidIndex(x: Int, y: Int) = (x in 0 until width) &&  (y in 0 until height)
+    private fun isValidIndex(x: Int, y: Int) = (x in 0 until width) && (y in 0 until height)
 
     override fun hashCode() = Objects.hash(width, height, endlessWidth, fields)
 
@@ -100,7 +100,7 @@ fun <F> MutableFieldMap<F>.toFieldMap(): FieldMap<F> = copy()
 
 @ExperimentalStdlibApi
 fun <F> FieldMap<F>.getAdjacentFieldTypes(x: Int, y: Int): List<F> = buildList {
-    for (adjacentY in y-1..y+1) {
+    for (adjacentY in y - 1..y + 1) {
         for (adjacentX in x - 1..x + 1) {
             if (adjacentX != x || adjacentY != y) {
                 getFieldType(adjacentX, adjacentY)?.let { add(it) }
@@ -140,4 +140,4 @@ private fun <F> FieldMap<F>.copy(): DefaultFieldMap<F> = MutableList(width * hei
     val y = index / width
     val x = index % width
     getFieldType(x, y)!!
-}. let { DefaultFieldMap(it, width) }
+}.let { DefaultFieldMap(it, width) }
