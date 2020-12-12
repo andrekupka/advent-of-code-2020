@@ -25,12 +25,5 @@ enum class MovementDirection(
     }
 }
 
-data class ScaledMovementDirection(
-    val scale: Int,
-    val direction: MovementDirection
-) {
-    val deltaX = direction.deltaX * scale
-    val deltaY = direction.deltaY * scale
-}
-
-operator fun Int.times(direction: MovementDirection) = ScaledMovementDirection(this, direction)
+operator fun Int.times(direction: MovementDirection) =
+    MovementVector(this * direction.deltaX, this * direction.deltaY)
