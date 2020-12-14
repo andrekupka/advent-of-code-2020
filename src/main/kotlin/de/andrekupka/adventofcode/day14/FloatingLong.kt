@@ -1,8 +1,12 @@
 package de.andrekupka.adventofcode.day14
 
+import de.andrekupka.adventofcode.utils.floatAtIndex
+
 data class FloatingLong(
     val value: Long,
-    val floatingBitIndices: List<Int> = emptyList()
+    val floatingBitIndexes: List<Int> = emptyList()
 )
 
-fun FloatingLong.expand(): Sequence<Long> = generateSequence(value) { null }
+fun FloatingLong.expand() = floatingBitIndexes.fold(listOf(value)) { values, floatingIndex ->
+    values.flatMap { it.floatAtIndex(floatingIndex) }
+}

@@ -1,5 +1,8 @@
 package de.andrekupka.adventofcode.day14
 
+import de.andrekupka.adventofcode.utils.setOneAtIndex
+import de.andrekupka.adventofcode.utils.setZeroAtIndex
+
 enum class BitOperation {
     ZERO,
     ONE,
@@ -27,14 +30,10 @@ fun Bitmask.maskValue(value: Long) = indexedOperationsWithEffect.fold(value) { o
 }
 
 fun Bitmask.maskValueFloating(value: Long): FloatingLong =
-    operations.foldIndexed(value to emptyList<Int>()) { index, (value, floatingIndices), operation ->
+    operations.foldIndexed(value to emptyList<Int>()) { index, (value, floatingIndexes), operation ->
         when (operation) {
-            BitOperation.ZERO -> value to floatingIndices
-            BitOperation.ONE -> value.setOneAtIndex(operations.reversedIndex(index)) to floatingIndices
-            BitOperation.X -> value to (floatingIndices + listOf(operations.reversedIndex(index)))
+            BitOperation.ZERO -> value to floatingIndexes
+            BitOperation.ONE -> value.setOneAtIndex(operations.reversedIndex(index)) to floatingIndexes
+            BitOperation.X -> value to (floatingIndexes + listOf(operations.reversedIndex(index)))
         }
-    }.let { (value, floatingIndices) -> FloatingLong(value, floatingIndices) }
-
-fun Long.setOneAtIndex(index: Int): Long = this or (1L shl index)
-
-fun Long.setZeroAtIndex(index: Int): Long = this and (1L shl index).inv()
+    }.let { (value, floatingIndexes) -> FloatingLong(value, floatingIndexes) }
