@@ -37,7 +37,7 @@ val initializationProgramParser = object : Grammar<InitializationProgram>() {
     override val rootParser get() = programParser
 
     private fun Char.toBitOperation() = when(this) {
-        'X' -> BitOperation.KEEP
+        'X' -> BitOperation.X
         '1' -> BitOperation.ONE
         '0' -> BitOperation.ZERO
         else -> error("Unexpected character for bit operation: $this")

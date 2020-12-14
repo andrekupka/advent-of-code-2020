@@ -2,12 +2,21 @@ package de.andrekupka.adventofcode.day14
 
 class SegmentationFaultException : RuntimeException()
 
+interface ExecutionContext {
+    val memorySpace: MemorySpace
+    var currentMask: Bitmask?
+}
+
+interface ExecutionRules {
+    fun execute(instruction: Instruction, context: ExecutionContext)
+}
+
 object InitializationProgramExecutor {
 
-    fun execute(program: InitializationProgram): MemorySpace {
+    fun execute(program: InitializationProgram, rules: ExecutionRules): MemorySpace {
         val memorySpace = MemorySpace()
 
-        val state = ExecutionState(program.instructions, memorySpace)
+        val state = ExecutionState(rules, program.instructions, memorySpace)
 
         while (!state.hasHalted) {
             state.executeNextInstruction()
@@ -17,11 +26,12 @@ object InitializationProgramExecutor {
     }
 
     private class ExecutionState(
+        private val rules: ExecutionRules,
         private val instructions: List<Instruction>,
-        private var memorySpace: MemorySpace,
+        override var memorySpace: MemorySpace,
         private var instructionPointer: Int = 0,
-        private var currentMask: Bitmask? = null
-    ) {
+        override var currentMask: Bitmask? = null
+    ): ExecutionContext {
         var hasHalted: Boolean = false
             private set
 
@@ -31,18 +41,9 @@ object InitializationProgramExecutor {
             } else throw SegmentationFaultException()
 
         fun executeNextInstruction() {
-            execute(currentInstruction)
+            rules.execute(currentInstruction, this)
             instructionPointer++
             hasHalted = instructionPointer == instructions.size
-        }
-
-        private fun execute(instruction: Instruction): Unit = when (instruction) {
-            is SetBitmaskInstruction -> {
-                currentMask = instruction.bitmask
-            }
-            is WriteMemoryInstruction -> {
-                memorySpace[instruction.address] = instruction.value.let { currentMask?.maskValue(it) ?: it }
-            }
         }
     }
 }
