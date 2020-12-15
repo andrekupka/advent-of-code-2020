@@ -1,8 +1,9 @@
 package de.andrekupka.adventofcode.day15
 
 import de.andrekupka.adventofcode.utils.readFile
+import kotlin.system.measureTimeMillis
 
-fun createNumberSequence(initialNumbers: List<Long>): Sequence<Long> {
+private fun createNumberSequence(initialNumbers: List<Long>): Sequence<Long> {
     require(initialNumbers.isNotEmpty())
 
     val lastTurnByNumber = mutableMapOf<Long, Int>()
@@ -24,16 +25,19 @@ fun createNumberSequence(initialNumbers: List<Long>): Sequence<Long> {
     }
 }
 
+private fun computeNumberOfTurn(initialNumbers: List<Long>, turn: Int) {
+    val time = measureTimeMillis {
+        val numberInTurn = createNumberSequence(initialNumbers).take(turn).last()
+        println("Number in turn $turn is $numberInTurn")
+    }
+    println("Computing number in turn $turn took $time ms")
+}
+
 fun main(args: Array<String>) {
     val content = readFile(args[0])
 
     val numbers = content.split(",").map { it.toLong() }
 
-    val numberSequence = createNumberSequence(numbers)
-    val numberInTurn2020 = numberSequence.take(2020).last()
-    println("Number in turn 2020 is $numberInTurn2020")
-
-    val turn = 30000000
-    val numberInTurn30000000 = createNumberSequence(numbers).take(turn).last()
-    println("Number in turn $turn is $numberInTurn30000000")
+    computeNumberOfTurn(numbers, 2020)
+    computeNumberOfTurn(numbers, 30000000)
 }
