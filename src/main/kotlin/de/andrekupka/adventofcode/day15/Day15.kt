@@ -32,4 +32,8 @@ fun main(args: Array<String>) {
     val numberSequence = createNumberSequence(numbers)
     val numberInTurn2020 = numberSequence.take(2020).last()
     println("Number in turn 2020 is $numberInTurn2020")
+
+    val turn = 30000000
+    val numberInTurn30000000 = createNumberSequence(numbers).take(turn).last()
+    println("Number in turn $turn is $numberInTurn30000000")
 }
