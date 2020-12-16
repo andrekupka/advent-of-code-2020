@@ -48,7 +48,6 @@ fun main(args: Array<String>) {
     }
 
     val sortedTicketRules = determineSortedTicketRules(ticketInformation.rules, validTickets)
-    println(sortedTicketRules)
 
     val multipliedDepartureValues = sortedTicketRules.withIndex().filter { it.value.name.startsWith("departure") }.map {
         ticketInformation.yourTicket.values[it.index].toLong()
