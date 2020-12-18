@@ -6,7 +6,11 @@ import de.andrekupka.adventofcode.utils.readLinesNotBlank
 fun main(args: Array<String>) {
     val lines = readLinesNotBlank(args[0])
 
-    val sumOfResults = lines.map { arithmeticExpressionParser.parseToEnd(it).evaluate() }.sum()
+    val strangeSumOfResults = lines.map { samePrecedenceArithmeticExpressionParser.parseToEnd(it).evaluate() }.sum()
+
+    println("Sum of results is $strangeSumOfResults")
+
+    val sumOfResults = lines.map { additionBeforeMultiplicationArithmeticExpressionParser.parseToEnd(it).evaluate() }.sum()
 
     println("Sum of results is $sumOfResults")
 }
