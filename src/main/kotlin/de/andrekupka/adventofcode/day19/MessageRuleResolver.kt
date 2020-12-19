@@ -1,6 +1,6 @@
 package de.andrekupka.adventofcode.day19
 
-class MessageRuleResolvingException(message: String): RuntimeException(message)
+class MessageRuleResolvingException(message: String) : RuntimeException(message)
 
 class MessageRuleResolver(
     ruleNodes: List<MessageRuleNode>
@@ -24,8 +24,12 @@ class MessageRuleResolver(
 
         return with(ruleNode) {
             when (this) {
-                is TerminalMessageRuleNode -> TerminalMessageRule(id, character)
-                is AlternativeSequenceMessageRuleNode -> AlternativeSequenceMessageRule(id, ruleSequences.map { resolveRuleSequence(it) })
+                is TerminalMessageRuleNode -> {
+                    TerminalMessageRule(id, character)
+                }
+                is AlternativeSequenceMessageRuleNode -> {
+                    AlternativeSequenceMessageRule(id, ruleSequences.map { resolveRuleSequence(it) })
+                }
             }
         }.also {
             rulesById[it.id] = it
@@ -34,8 +38,8 @@ class MessageRuleResolver(
 
     private fun resolveRuleSequence(ruleSequence: List<Int>) = MessageRuleSequence(
         ruleSequence.map {
-            val node = ruleNodesById[it] ?: throw MessageRuleResolvingException("There is not rule with id $it")
-            resolveNode(node)
+            val node = ruleNodesById[it] ?: throw MessageRuleResolvingException("There is no rule with id $it")
+            MessageRuleReference { resolveNode(node) }
         }
     )
 }
