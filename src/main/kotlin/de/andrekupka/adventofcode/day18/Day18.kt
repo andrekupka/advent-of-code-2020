@@ -7,16 +7,12 @@ import de.andrekupka.adventofcode.utils.readLinesNotBlank
 fun main(args: Array<String>) {
     val lines = readLinesNotBlank(args[0])
 
-    val strangeSumOfResults = lines.map { samePrecedenceArithmeticExpressionParser.parseToEnd(it).evaluate() }.sum()
+    val samePrecedenceSumOfResults = lines.map { samePrecedenceArithmeticExpressionParser.parseToEnd(it).evaluate() }.sum()
+    println("Same precedence sum of results is $samePrecedenceSumOfResults")
 
-    println("Sum of results is $strangeSumOfResults")
+    val additionBeforeMultiplicationSumOfResults = lines.map { additionBeforeMultiplicationArithmeticExpressionParser.parseToEnd(it).evaluate() }.sum()
+    println("Addition before multiplication sum of results is $additionBeforeMultiplicationSumOfResults")
 
-    val sumOfResults = lines.map { additionBeforeMultiplicationArithmeticExpressionParser.parseToEnd(it).evaluate() }.sum()
-
-    println("Sum of results is $sumOfResults")
-
-    val arithmeticTokens = lines.map { arithmeticTokenizer.tokenize(it) }
-    arithmeticTokens.forEach {
-        println(it)
-    }
+    val handwrittenSamePrecedenceSumOfResults = lines.map { HandwrittenArithmeticExpressionParser.parse(it).evaluate() }.sum()
+    println("Handwritten same precedence sum of results is $handwrittenSamePrecedenceSumOfResults")
 }

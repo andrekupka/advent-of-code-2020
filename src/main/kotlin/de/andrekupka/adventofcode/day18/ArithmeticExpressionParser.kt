@@ -18,8 +18,8 @@ abstract class AbstractArithmeticExpressionParser() : Grammar<ArithmeticExpressi
 
     val whitespace by regexToken("\\s+", ignore = true)
 
-    val plusParser by plus use { TermOperation.PLUS }
-    val timesParser by times use { TermOperation.TIMES }
+    val plusParser by plus use { TermOperator.PLUS }
+    val timesParser by times use { TermOperator.TIMES }
 
     val numberParser by numberLiteral use { NumberLiteralExpression(text.toLong()) }
 

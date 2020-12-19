@@ -1,6 +1,6 @@
 package de.andrekupka.adventofcode.day18
 
-enum class TermOperation {
+enum class TermOperator {
     PLUS,
     TIMES
 }
@@ -16,12 +16,12 @@ data class NumberLiteralExpression(
 }
 
 data class TermExpression(
-    val operation: TermOperation,
+    val operator: TermOperator,
     val left: ArithmeticExpression,
     val right: ArithmeticExpression
 ) : ArithmeticExpression() {
-    override fun evaluate() = when(operation) {
-        TermOperation.PLUS -> left.evaluate() + right.evaluate()
-        TermOperation.TIMES -> left.evaluate() * right.evaluate()
+    override fun evaluate() = when(operator) {
+        TermOperator.PLUS -> left.evaluate() + right.evaluate()
+        TermOperator.TIMES -> left.evaluate() * right.evaluate()
     }
 }
