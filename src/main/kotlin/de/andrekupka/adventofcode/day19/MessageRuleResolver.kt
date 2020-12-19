@@ -17,7 +17,7 @@ class MessageRuleResolver(
     }
 
     private fun resolveNode(ruleNode: MessageRuleNode): MessageRule {
-        val rule = rulesById.get(ruleNode.id)
+        val rule = rulesById[ruleNode.id]
         if (rule != null) {
             return rule
         }
