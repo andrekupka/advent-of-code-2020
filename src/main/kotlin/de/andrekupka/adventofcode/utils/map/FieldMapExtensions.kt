@@ -69,10 +69,19 @@ fun <F> FieldMap<F>.getBorders(): FieldMapBorders<F> = FieldMapBorders(
 
 fun <F> FieldMapBorders<F>.toList(): List<List<F>> = listOf(north, east, south, west)
 
-fun <F> FieldMapBorders<F>.isAdjacentInAnyOrientationTo(other: FieldMapBorders<F>): Boolean {
+fun <F> FieldMapBorders<F>.findAdjacencyWith(other: FieldMapBorders<F>): BorderAdjacency? {
     val ownBorders = toList()
     val otherBorders = other.toList()
-    return (ownBorders cross otherBorders).any { (ownBorder, otherBorder) ->
-        ownBorder == otherBorder || ownBorder == otherBorder.asReversed()
+    ownBorders.forEachIndexed { ownDirection, ownBorder ->
+        otherBorders.forEachIndexed { otherDirection, otherBorder ->
+            if (ownBorder == otherBorder) {
+                return BorderAdjacency(ownDirection, otherDirection, flipped = false)
+            } else if (ownBorder == otherBorder.asReversed()) {
+                return BorderAdjacency(ownDirection, otherDirection, flipped = true)
+            }
+        }
     }
+    return null
 }
+
+fun BorderAdjacency.inverse() = BorderAdjacency(otherDirection, ownDirection, flipped)

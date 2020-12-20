@@ -11,6 +11,12 @@ data class FieldMapBorders<F>(
     val west: List<F>
 )
 
+data class BorderAdjacency(
+    val ownDirection: Int,
+    val otherDirection: Int,
+    val flipped: Boolean
+)
+
 interface FieldMap<F> {
     val width: Int
     val height: Int
