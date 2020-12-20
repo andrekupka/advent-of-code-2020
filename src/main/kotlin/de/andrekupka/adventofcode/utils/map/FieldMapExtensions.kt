@@ -75,9 +75,9 @@ fun <F> FieldMapBorders<F>.findAdjacencyWith(other: FieldMapBorders<F>): BorderA
     ownBorders.forEachIndexed { ownDirection, ownBorder ->
         otherBorders.forEachIndexed { otherDirection, otherBorder ->
             if (ownBorder == otherBorder) {
-                return BorderAdjacency(ownDirection, otherDirection, flipped = false)
-            } else if (ownBorder == otherBorder.asReversed()) {
                 return BorderAdjacency(ownDirection, otherDirection, flipped = true)
+            } else if (ownBorder == otherBorder.asReversed()) {
+                return BorderAdjacency(ownDirection, otherDirection, flipped = false)
             }
         }
     }

@@ -16,8 +16,8 @@ fun computeBorderAdjacenciesByTileId(tilesById: Map<Long, Tile>): Map<Long, Set<
             if (firstId != secondId) {
                 val adjacency = firstBorders.findAdjacencyWith(secondBorders)
                 if (adjacency != null) {
-                    compute(firstId) { _, value -> setOf(secondId to adjacency) + (value ?: emptySet())}
-                    compute(secondId) { _, value -> setOf(firstId to adjacency.inverse()) + (value ?: emptySet())}
+                    compute(firstId) { _, value -> setOf(secondId to adjacency) + (value ?: emptySet()) }
+                    compute(secondId) { _, value -> setOf(firstId to adjacency.inverse()) + (value ?: emptySet()) }
                 }
             }
         }
@@ -41,4 +41,13 @@ fun main(args: Array<String>) {
     val cornerIds = findCornerTileIds(borderAdjacenciesByTileId)
     val cornerIdProduct = cornerIds.reduce { a, b -> a * b }
     println("Product of corner ids is $cornerIdProduct")
+
+    borderAdjacenciesByTileId.forEach { tileId, adjacencies ->
+        println("Tile $tileId")
+        adjacencies.forEach { adjacency ->
+            with(adjacency) {
+                println("\t$first -> ${second.ownDirection} - ${second.otherDirection} - ${second.flipped}")
+            }
+        }
+    }
 }
