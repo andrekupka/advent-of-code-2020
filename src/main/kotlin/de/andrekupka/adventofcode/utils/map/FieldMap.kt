@@ -1,7 +1,15 @@
 package de.andrekupka.adventofcode.utils.map
 
 import java.util.*
+import kotlin.NoSuchElementException
 import kotlin.math.max
+
+data class FieldMapBorders<F>(
+    val north: List<F>,
+    val east: List<F>,
+    val south: List<F>,
+    val west: List<F>
+)
 
 interface FieldMap<F> {
     val width: Int
@@ -10,10 +18,14 @@ interface FieldMap<F> {
     val hasEndlessWidth: Boolean
 
     fun getFieldType(x: Int, y: Int): F?
+
+    operator fun get(x: Int, y: Int): F
 }
 
 interface MutableFieldMap<F> : FieldMap<F> {
     fun setFieldType(x: Int, y: Int, fieldType: F)
+
+    operator fun set(x: Int, y: Int, fieldType: F)
 }
 
 class DefaultFieldMap<F>(
@@ -29,10 +41,14 @@ class DefaultFieldMap<F>(
 
     override fun getFieldType(x: Int, y: Int) = getFieldIndexIfValid(x, y)?.let { fields[it] }
 
+    override operator fun get(x: Int, y: Int): F = getFieldType(x, y) ?: throw NoSuchElementException("No field at x $x and y $y")
+
     override fun setFieldType(x: Int, y: Int, fieldType: F) {
         val index = getFieldIndexIfValid(x, y) ?: throw IndexOutOfBoundsException("No field at x $x and y $y")
         fields[index] = fieldType
     }
+
+    override operator fun set(x: Int, y: Int, fieldType: F) = setFieldType(x, y, fieldType)
 
     private fun getFieldIndexIfValid(x: Int, y: Int): Int? {
         val xIndex = getXIndex(x)
@@ -76,65 +92,9 @@ class DefaultFieldMap<F>(
     }
 }
 
-inline fun <F> FieldMap<F>.forEach(operation: (x: Int, y: Int, type: F) -> Unit) {
-    for (y in 0 until height) {
-        for (x in 0 until width) {
-            operation(x, y, getFieldType(x, y)!!)
-        }
-    }
-}
-
-inline fun <F> FieldMap<F>.count(predicate: (F) -> Boolean): Int {
-    var count = 0
-    forEach { _, _, type ->
-        if (predicate(type)) {
-            count++
-        }
-    }
-    return count
-}
-
 fun <F> FieldMap<F>.toMutableFieldMap(): MutableFieldMap<F> = copy()
 
 fun <F> MutableFieldMap<F>.toFieldMap(): FieldMap<F> = copy()
-
-@ExperimentalStdlibApi
-fun <F> FieldMap<F>.getAdjacentFieldTypes(x: Int, y: Int): List<F> = buildList {
-    for (adjacentY in y - 1..y + 1) {
-        for (adjacentX in x - 1..x + 1) {
-            if (adjacentX != x || adjacentY != y) {
-                getFieldType(adjacentX, adjacentY)?.let { add(it) }
-            }
-        }
-    }
-}
-
-private val DIRECTION_LIST = listOf(
-    -1 to 0, // left
-    -1 to -1, // left up
-    0 to -1, // up
-    1 to -1, // right up
-    1 to 0, // right
-    1 to 1, // right down
-    0 to 1, // down
-    -1 to 1 // left down
-)
-
-fun <F> FieldMap<F>.countVisibleFieldTypes(x: Int, y: Int, blockType: F, searchType: F): Int {
-    fun searchInDirection(deltaX: Int, deltaY: Int): Boolean {
-        for (distance in 1..max(width, height)) {
-            val effectiveX = x + deltaX * distance
-            val effectiveY = y + deltaY * distance
-            when (getFieldType(effectiveX, effectiveY)) {
-                blockType, null -> return false
-                searchType -> return true
-            }
-        }
-        return false
-    }
-
-    return DIRECTION_LIST.map { (deltaX, deltaY) -> searchInDirection(deltaX, deltaY) }.count { it }
-}
 
 private fun <F> FieldMap<F>.copy(): DefaultFieldMap<F> = MutableList(width * height) { index ->
     val y = index / width
