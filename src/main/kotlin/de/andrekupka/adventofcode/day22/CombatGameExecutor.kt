@@ -1,11 +1,6 @@
 package de.andrekupka.adventofcode.day22
 
-data class GameResult(
-    val winnerDeck: PlayerDeck,
-    val loserDeck: PlayerDeck
-)
-
-class GameExecutor(
+class CombatGameExecutor(
     firstDeck: PlayerDeck,
     secondDeck: PlayerDeck
 ) {

@@ -4,6 +4,8 @@ interface PlayerDeck {
     val name: String
     val cards: List<Int>
 
+    val hasCards get() = cards.isNotEmpty()
+
     val isLooser get() = cards.isEmpty()
 }
 
@@ -20,19 +22,25 @@ data class SimplePlayerDeck(
 
     override fun takeTopCard(): Int = cards.removeFirst()
 
-    override fun appendCards(winnerCard: Int, loserCard: Int) {
-        require(winnerCard > loserCard) { "Winner card must be greater than loser card" }
+    override fun appendCards(winnerCard: Int, looserCard: Int) {
         cards.apply {
             add(winnerCard)
-            add(loserCard)
+            add(looserCard)
         }
     }
+
+    override fun toString(): String = "Deck $name: ${cards.joinToString(",")}"
 }
 
-
-fun PlayerDeck.toPlayablePlayerDeck() = SimplePlayerDeck(
+fun PlayerDeck.toPlayablePlayerDeck(): PlayablePlayerDeck = SimplePlayerDeck(
     name = name,
     cards = cards.toMutableList()
 )
+
+fun PlayablePlayerDeck.toPlayerDeck(): PlayerDeck = SimplePlayerDeck(
+    name = name,
+    cards = cards.toMutableList()
+)
+
 
 val PlayerDeck.score get() = cards.asReversed().mapIndexed { index, value -> (index + 1) * value }.sum()
