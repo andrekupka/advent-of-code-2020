@@ -50,15 +50,7 @@ private fun computeAllergensByIngredients(possibleIngredientsByAllergens: Map<St
 
 fun main(args: Array<String>) {
     val lines = readLinesNotBlank(args[0])
-    /*val input = """
-        mxmxvkd kfcds sqjhc nhms (contains dairy, fish)
-        trh fvjkl sbzzf mxmxvkd (contains dairy)
-        sqjhc fvjkl (contains soy)
-        sqjhc mxmxvkd sbzzf (contains fish)
-    """.trimIndent()
-
-    val lines = input.lines().filter { it.isNotBlank() }*/
-
+    
     val foods = lines.map { foodParser.parseToEnd(it) }
 
     val possibleIngredientsByAllergens = computePossibleIngredientsByAllergens(foods)
